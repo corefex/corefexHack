@@ -1,0 +1,94 @@
+{
+  "title": "CentralAgentContract",
+  "description": "Contrato unificado de comunicacion inter-agente y sincronizacion de estado para HACK-AGENT",
+  "type": "object",
+  "required": ["project_id", "execution_id", "status", "tasks", "guardrails"],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "execution_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["idle", "planning", "running", "awaiting_human_approval", "completed", "failed"]
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["task_id", "owner", "description", "status", "dependencies"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "owner": {
+            "type": "string",
+            "enum": ["orchestrator", "investigator_agent", "creator_agent", "evaluator_judge", "human"]
+          },
+          "description": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "done", "blocked"]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "output_payload": {
+            "type": "object",
+            "properties": {
+              "summary": { "type": "string" },
+              "data": { "type": "object" },
+              "validation_passed": { "type": "boolean" },
+              "critique_notes": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "required": ["tool_permissions", "require_human_confirmation"],
+      "properties": {
+        "tool_permissions": {
+          "type": "object",
+          "properties": {
+            "read_access": { "type": "array", "items": { "type": "string" } },
+            "write_access": { "type": "array", "items": { "type": "string" } },
+            "action_access": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "require_human_confirmation": { "type": "boolean" },
+        "human_approval_receipt": {
+          "type": "object",
+          "properties": {
+            "approved": { "type": "boolean" },
+            "approved_by": { "type": "string" },
+            "timestamp": { "type": "string" },
+            "approval_token": { "type": "string" }
+          }
+        }
+      }
+    },
+    "ui_state_sync": {
+      "type": "object",
+      "properties": {
+        "active_view": {
+          "type": "string",
+          "enum": ["dashboard", "timeline_logs", "evidence_card", "approval_gate"]
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "agent": { "type": "string" },
+              "message": { "type": "string" },
+              "timestamp": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

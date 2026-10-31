@@ -1,0 +1,12 @@
+{
+  "scenario_01": {
+    "intent": "Implementar microservicio de verificacion de integridad de datos",
+    "expected_boundaries": ["/src/backend"],
+    "ralph_loop_expected_iterations": 2,
+    "mock_response": {
+      "status": "success",
+      "pydantic_verified": true,
+      "security_gate_triggered": true
+    }
+  }
+}
